@@ -63,3 +63,70 @@ CHÚ Ý: ĐỂ NGĂN NGỪA VIỆC CÓ FILE .mk NÀO ĐÓ TRÙNG TÊN VỚI RULE
 <p align="center">
   <img width="679" height="73" alt="image" src="https://github.com/user-attachments/assets/0d6e84bf-a981-4a89-97da-4d9ddca3ed57" />
 </p>
+
+## Ví Dụ
+Tạo 1 file Makefile có nội dụng như sau:
+<p align="center">
+  <img width="775" height="95" alt="image" src="https://github.com/user-attachments/assets/d7d31746-ebe9-40df-9af0-2bb9d6c979f2" />
+</p>
+
+Khi ta chạy lệnh make, thì sẽ chạy rule test có kết quả như sau:
+<p align="center">
+  <img width="775" height="113" alt="image" src="https://github.com/user-attachments/assets/65e885f0-afba-46bf-b473-d745e791fc98" />
+</p>
+
+Trong đó:
+  - @echo $@: cho ra tên target
+  - @echo $<: cho ra giá trị đầu tiên nằm bên phải dấu :
+  - @echo $^: cho ra toàn bộ dependence
+
+Tiếp theo thêm nội dung sau vào file Makefile:
+<p align="center">
+  <img width="775" height="64" alt="image" src="https://github.com/user-attachments/assets/4822a364-0a61-489b-99e1-61bc06b05d70" />
+</p>
+Chạy lênh: make hellomake sẽ cho kết quả như sau:
+<p align="center">
+  <img width="775" height="111" alt="image" src="https://github.com/user-attachments/assets/7f8d7088-67d4-4797-b36b-3738f8a3e6ab" />
+</p>
+
+Trong đó:
+  - $(CC) -o $@ main.o hello.o $(CFLASS): là câu lệnh ẩn, tức là khi chạy lênh này chương trình sẽ tìm xem file main.o và hello.o (.o được gọi là file opject) đã được tạo hay chưa, nếu chưa thì tạo ra 2 file này và kết hợp 2 file này để biên dịch chương trình, còn nếu đã có rồi thì xét xem có thay đổi không, nếu không thì không chạy rule ẩn nữa mà biên dịch trực tiếp luông, còn nếu có thay đổi thì chạy rule ẩn
+  - > Không nên dùng vì tồn tại 1 số rủi do
+  - thay vào đó ta có thể viết như sau:
+<p align="center">
+  <img width="775" height="61" alt="image" src="https://github.com/user-attachments/assets/66c57855-f98c-436d-9f89-23e2adc333fc" />
+</p>
+hoặc:
+<p align="center">
+  <img width="641" height="61" alt="image" src="https://github.com/user-attachments/assets/75e69f62-b894-4c41-a568-3d07d34f726f" />
+</p>
+
+  - Khi chạy lệnh make hellomake lại thì kết quả vẫn là:
+<p align="center">
+  <img width="641" height="116" alt="image" src="https://github.com/user-attachments/assets/200f240f-6878-4109-8be2-37f9e6ab4196" />
+</p>
+
+# 2. QUÁ TRÌNH BIÊN DỊCH 1 CHƯƠNG TRÌNH C
+
+## 2.1 Giai đoạn tiền xử lý (pre-processing)
+
+  - Loại bỏ comment
+  - Mở rộng macros
+  - Mở rộng include file
+  - Biên dịch các câu lệnh điều kiện
+> kết quả thu được là 1 file .i
+
+## 2.2 Giai đoạn dịch ngôn ngữ bậc cao sang asm (compilation)
+
+- Biên dịch từ file .i sang file .S (assembly)
+
+## 2.3 Biên dịch asm sang mã máy (Assembly)
+
+  - Biên dịch file .s sang file .0
+  - Thông qua Assembler output thu được là file .o. Đây là file chứa các chỉ lệnh cấp độ ngôn ngữ máy (machine language)
+
+## 2.4 Giai đoạn Linker (Linking)
+
+  - Mỗi file .o thu được ở giai đoạn Assembly là 1 phần của chương trình
+  - ở giai đoạn linking sẽ liên kết chúng lại với nhau để tạo ra 1 file thực thi hoàn chình
+
